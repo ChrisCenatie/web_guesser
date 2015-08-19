@@ -6,12 +6,15 @@ require 'sinatra/reloader'
 
 get '/' do
   guess = params["guess"]
+  cheat = params[:cheat]
   message = check_guess(guess)
   count_message = check_count(guess)
+  cheat_message = cheat_mode(cheat)
   erb :index, :locals => { :number => @@secret_number,
                            :message => message,
                            :color => @color,
-                           :count_message => count_message
+                           :count_message => count_message,
+                           :cheat_message => cheat_message
                          }
 end
 
@@ -51,5 +54,13 @@ def check_count(guess)
     @@count = 5
     @@secret_number = rand(100)
     "Too many tries! A new number has been generated"
+  end
+end
+
+def cheat_mode(cheat)
+  if cheat == "true"
+    "The secret number is #{@@secret_number}"
+  else
+    ""
   end
 end
